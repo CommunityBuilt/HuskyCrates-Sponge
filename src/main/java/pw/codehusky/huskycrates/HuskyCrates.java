@@ -40,7 +40,6 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import pw.codehusky.huskycrates.commands.Chest;
-import pw.codehusky.huskycrates.commands.Hand;
 import pw.codehusky.huskycrates.commands.Key;
 import pw.codehusky.huskycrates.commands.elements.CrateElement;
 import pw.codehusky.huskycrates.commands.subcommand.Reload;
@@ -109,21 +108,12 @@ public class HuskyCrates {
                 .build();
 
 
-        CommandSpec hand = CommandSpec.builder()
-                .description(Text.of("Get a Debug info about the specific Item"))
-                .permission("huskycrates.hand")
-                .arguments(
-                        GenericArguments.playerOrSource(Text.of("player"))
-                ).executor(new Hand())
-                .build();
-
 
         CommandSpec crateSpec = CommandSpec.builder()
                 .description(Text.of("Main crates command"))
                 .permission("huskycrates")
                 .child(reload, "reload")
                 .child(key, "key")
-                .child(hand, "hand")
                 .child(chest, "chest")
                 .build();
 
