@@ -7,6 +7,7 @@ This fork has some changes made to it  - this is updated with the documentation 
 You can download development builds from my [CI server](http://ci.communitybuilt.net/job/HuskyCrates/) where it is always up to date with the latest code.
 
 ## Changes made to this fork.:
+ - Implemented the option to use meta IDs.
  - Using a poppy instead of a nether star
  - Send the gifts to the enderChest if their inventory is full.
  - Performance changes
@@ -30,6 +31,7 @@ crates {
                 chance=50 # The chance, out of 100, that this item will be drawn.
                 command="give %p minecraft:diamond 10" # A command to run on picking this item.
                 id="minecraft:diamond" # The id of the item we're using
+                meta=0 #If there is meta on your item this is a good option to use it!
                 name="Diamond Box" # A name
             },
             {
@@ -37,7 +39,8 @@ crates {
                 # Chances are assumed for items that don't have it.
                 id="minecraft:dirt"
                 lore="Literally dirt. :)" # Lore.
-                name=Dirt 
+                name=Dirt
+                meta=0 #If there is meta on your item this is a good option to use it!
                 #Enchanted dirt coming soon.
             }
             #Make sure your chances don't add past 100 or you'll get an error!

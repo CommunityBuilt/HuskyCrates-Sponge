@@ -3,6 +3,8 @@ package pw.codehusky.huskycrates.crate;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.apache.commons.lang3.ArrayUtils;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.DataContainer;
+import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
 import org.spongepowered.api.entity.living.player.Player;
@@ -52,28 +54,37 @@ public class VirtualCrate {
 
             String name = item.getNode("name").getString("");
             String itemID = item.getNode("id").getString("").toUpperCase();
+            int metaID = item.getNode("meta").getInt(-1);
             int amount = item.getNode("amount").getInt(1);
+
             if (Sponge.getRegistry().getType(ItemType.class, itemID).isPresent()) {
                 ItemStack ourChild = ItemStack.builder()
                         .itemType(Sponge.getRegistry().getType(ItemType.class, itemID).get())
                         .quantity(amount)
                         .build();
+
                 if (name.length() > 0) {
                     ourChild.offer(Keys.DISPLAY_NAME, TextSerializers.FORMATTING_CODE.deserialize(name));
                 }
-                EnchantmentData ed = ourChild.getOrCreate(EnchantmentData.class).get();
-                if (false) {
-                    ourChild.offer(ed);
-                }
-                //ed.addElement()
+
+
+                // let's add the lore on the item.
                 String lore = item.getNode("lore").getString("");
-                ArrayList<Text> bb = new ArrayList<>();
                 if (lore.length() > 0) {
+                    ArrayList<Text> bb = new ArrayList<>();
                     bb.add(TextSerializers.FORMATTING_CODE.deserialize(lore));
+                    ourChild.offer(Keys.ITEM_LORE, bb);
                 }
 
-                ourChild.offer(Keys.ITEM_LORE, bb);
-                ourChild.offer(Keys.HIDE_ENCHANTMENTS, true);
+
+                //Meta ID
+                if(metaID >= 0) {
+                    DataContainer container = ourChild.toContainer().set(DataQuery.of("UnsafeDamage"), metaID);
+                    ourChild = ItemStack.builder()
+                            .fromContainer(container)
+                            .build();
+                }
+
                 String potentialCommand = item.getNode("command").getString("");
                 if (item.getNode("chance").isVirtual()) {
                     Object[] t = {ourChild};
@@ -97,8 +108,11 @@ public class VirtualCrate {
                     }
                 }
 
+            }else{
+                HuskyCrates.instance.logger.error(name + " is not a known ItemType");
             }
         }
+
         if (equality.size() > 0) {
             int remaining = (int) (100 - currentProb);
             float equalProb = (float) remaining / (float) equality.size();

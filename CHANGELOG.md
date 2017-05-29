@@ -3,6 +3,7 @@
  This project adheres to [Semantic Versioning](http://semver.org/), and following the format from [keep a CHANGELOG](http://keepachangelog.com/)
  ## [Unreleased]
  ### Added
+  - Added the option to have meta IDs  
 
  ### Fixed
 
