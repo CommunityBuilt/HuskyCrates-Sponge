@@ -48,11 +48,11 @@ public class VirtualCrate {
         float currentProb = 0;
         itemSet = new ArrayList<>();
         commandSet = new HashMap<>();
-        for (CommentedConfigurationNode e : items) {
+        for (CommentedConfigurationNode item : items) {
 
-            String name = e.getNode("name").getString("");
-            String itemID = e.getNode("id").getString("").toUpperCase();
-            int amount = e.getNode("amount").getInt(1);
+            String name = item.getNode("name").getString("");
+            String itemID = item.getNode("id").getString("").toUpperCase();
+            int amount = item.getNode("amount").getInt(1);
             if (Sponge.getRegistry().getType(ItemType.class, itemID).isPresent()) {
                 ItemStack ourChild = ItemStack.builder()
                         .itemType(Sponge.getRegistry().getType(ItemType.class, itemID).get())
@@ -66,7 +66,7 @@ public class VirtualCrate {
                     ourChild.offer(ed);
                 }
                 //ed.addElement()
-                String lore = e.getNode("lore").getString("");
+                String lore = item.getNode("lore").getString("");
                 ArrayList<Text> bb = new ArrayList<>();
                 if (lore.length() > 0) {
                     bb.add(TextSerializers.FORMATTING_CODE.deserialize(lore));
@@ -74,8 +74,8 @@ public class VirtualCrate {
 
                 ourChild.offer(Keys.ITEM_LORE, bb);
                 ourChild.offer(Keys.HIDE_ENCHANTMENTS, true);
-                String potentialCommand = e.getNode("command").getString("");
-                if (e.getNode("chance").isVirtual()) {
+                String potentialCommand = item.getNode("command").getString("");
+                if (item.getNode("chance").isVirtual()) {
                     Object[] t = {ourChild};
                     if (potentialCommand.length() > 0) {
                         Object[] add = {potentialCommand};
@@ -85,8 +85,8 @@ public class VirtualCrate {
                         equality.add(t);
                     }
                 } else {
-                    Object[] t = {e.getNode("chance").getFloat(), ourChild};
-                    currentProb += e.getNode("chance").getFloat();
+                    Object[] t = {item.getNode("chance").getFloat(), ourChild};
+                    currentProb += item.getNode("chance").getFloat();
                     if (potentialCommand.length() > 0) {
                         Object[] add = {potentialCommand};
                         Object[] g = ArrayUtils.addAll(t, add);

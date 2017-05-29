@@ -1,11 +1,28 @@
 plugins {
     id 'org.spongepowered.plugin' version '0.8.1'
+    id 'ninja.miserable.blossom' version '1.0.1'
 }
-
-group = 'pw.codehusky.huskycrates'
-version = '0.9.3'
+version = '0.10.0'
 description = 'A Crates plugin for Sponge'
+project.ext.authors = 'KasperFranz, CodeHusky'
+group = 'pw.codehusky.huskycrates'
 
 dependencies {
     compile 'org.spongepowered:spongeapi:5.2.0-SNAPSHOT'
+}
+
+blossom {
+    def location = 'src/main/java/pw/codehusky/huskycrates/HuskyCrates.java'
+
+    replaceToken '@name@', project.name, location
+    replaceToken '@version@', project.version+"-"+getGitHash(), location
+    replaceToken '@description@', project.description, location
+    replaceToken '@authors@', rootProject.authors, location
+}
+
+
+static String getGitHash() {
+    def process = 'git rev-parse --short HEAD'.execute()
+    process.waitFor()
+    return process.exitValue() ? 'unknown' : process.text.trim()
 }
